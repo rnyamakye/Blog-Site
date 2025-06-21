@@ -167,3 +167,4 @@ On the backend, set up Express server with basic routes and Firebase token verif
 - Connect to backend for dynamic blog data.
 - Make blog cards clickable for detail pages.
 - Add pagination or infinite scroll for more posts.
+

@@ -77,10 +77,19 @@ const AuthPopover: React.FC = () => {
 
   return (
     <>
-      <button
-        onClick={openPopover}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
+      <button onClick={openPopover} className="flex-1 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg p-2 flex items-center justify-center gap-2 hover:bg-blue-50 transition">
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="inline"
+          viewBox="0 0 24 24"
+        >
+          <circle cx="12" cy="7" r="4" />
+          <path d="M5.5 21a7 7 0 0 1 13 0" />
+        </svg>
         Sign In
       </button>
 

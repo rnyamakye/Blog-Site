@@ -1,100 +1,109 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { getData } from "./lib";
+import { config } from "./config";
 
 // Dummy data for posts
-const posts = [
-  {
-    category: "TECH",
-    title: "The Future of AI: What’s Next for Artificial Intelligence",
-    author: "John Doe",
-    date: "April 24, 2024",
-    image: "/ai.jpg",
-    featured: true
-  },
-  {
-    category: "SPORTS",
-    title: "How Technology Is Changing the Sports Industry",
-    author: "Jane Smith",
-    date: "April 24, 2024",
-    image: "/basketball.jpg"
-  },
-  {
-    category: "ECONOMICS",
-    title: "Understanding Inflation: Causes and Effects",
-    author: "David Johnson",
-    date: "April 24, 2024",
-    image: "/chart.jpg"
-  },
-  {
-    category: "TECH",
-    title: "Top Programming Languages to Learn in 2024",
-    author: "Emily White",
-    date: "April 24, 2024",
-    image: "/2024.jpg"
-  }
-];
-
-const navLinks = [
-  { label: "TECH", href: "#" },
-  { label: "SPORTS", href: "#" },
-  { label: "ECONOMICS", href: "#" }
-];
+// const posts = [
+//   {
+//     category: "TECH",
+//     title: "The Future of AI: What’s Next for Artificial Intelligence",
+//     author: "John Doe",
+//     date: "April 24, 2024",
+//     image: "/ai.jpg",
+//     featured: true
+//   },
+//   {
+//     category: "SPORTS",
+//     title: "How Technology Is Changing the Sports Industry",
+//     author: "Jane Smith",
+//     date: "April 24, 2024",
+//     image: "/basketball.jpg"
+//   },
+//   {
+//     category: "ECONOMICS",
+//     title: "Understanding Inflation: Causes and Effects",
+//     author: "David Johnson",
+//     date: "April 24, 2024",
+//     image: "/chart.jpg"
+//   },
+//   {
+//     category: "TECH",
+//     title: "Top Programming Languages to Learn in 2024",
+//     author: "Emily White",
+//     date: "April 24, 2024",
+//     image: "/2024.jpg"
+//   }
+// ];
 
 const App: React.FC = () => {
+  const [articles, setArticles] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getData(`${config.baseURL}/tech`)
+      .then((data) => setArticles(data.articles || []))
+      .catch((err) => setError(err.message));
+  }, []);
+
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className=" min-h-screen mb-16">
       {/* Top Navbar */}
-      <header className="bg-[#0033A0] text-white shadow-sm">
-        <div className="max-w-5xl mx-auto flex items-center px-4 py-3">
-          {/* Navigation */}
-          <nav className="flex gap-6">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="font-semibold hover:underline"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </header>
 
       {/* Main Content */}
       <main className="max-w-2xl mx-auto px-4">
+        <ul className="space-y-4">
+          {articles.map((article) => (
+            <li
+              key={article.url}
+              className="flex items-center gap-4 p-4 rounded-lg hover:shadow-lg transition-shadow border border-gray-200"
+            >
+              {/* Image */}
+              {article.urlToImage && (
+                <img
+                  src={article.urlToImage}
+                  alt={article.title}
+                  className="w-24 h-20 object-cover rounded-md flex-shrink-0"
+                />
+              )}
+              {/* Article Title */}
+              <a
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold text-blue-700 hover:underline"
+              >
+                {article.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+
         {/* Featured Post */}
-        <motion.div
+        {/* <motion.div
           className="bg-white rounded-2xl shadow-md mt-6 mb-6 overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="relative">
-            <img
-              src={posts[0].image}
-              alt={posts[0].title}
-              className="w-full h-56 object-cover"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-              <div className="text-xs uppercase tracking-widest text-gray-200 mb-1">
-                {posts[0].category}
-              </div>
-              <h2 className="text-2xl font-bold text-white mb-2">
-                {posts[0].title}
-              </h2>
-              <div className="text-gray-200 text-sm">
-                By {posts[0].author} &nbsp;•&nbsp; {posts[0].date}
-              </div>
-            </div>
-          </div>
-        </motion.div>
+          <ul>
+            {articles.map((article) => (
+              <li key={article.id}>
+                <a href={article.url} target="_blank" rel="noopener noreferrer">
+                  {article.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </motion.div> */}
 
         {/* List of Posts */}
-        <div className="flex flex-col gap-4">
-          {posts.slice(1).map((post) => (
+        {/* <div className="flex flex-col gap-4">
+          {articles.map((article) => (
             <motion.div
-              key={post.title}
+              key={article?.id}
               className="flex bg-white rounded-xl shadow-sm overflow-hidden"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -116,7 +125,7 @@ const App: React.FC = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </div> */}
       </main>
     </div>
   );
