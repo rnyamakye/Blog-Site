@@ -19,32 +19,14 @@ const navLinks: NavLink[] = [
   { label: "Contact", href: "/contact" }
 ];
 
-const sections: string[] = [
-  "U.S. News",
-  "Politics",
-  "World",
-  "Business",
-  "Sports",
-  "Investigations",
-  "Culture & Trends",
-  "Health",
-  "Science",
-  "Tech",
-  "Weather",
-  "Video Features",
-  "Photos",
-  "NBC Select",
-  "NBC Asian America",
-  "NBC BLK",
-  "NBC Latino",
-  "NBC Out"
-];
+ 
 
 const highlights: Highlights[] = [
-  { name: "TECH", href: "/" },
-  { name: "SPORTS", href: "/" },
-  { name: "ECONOMICS", href: "/" }
+  { name: "TECH", href: "/tech" },
+  { name: "SPORTS", href: "/sports" },
+  { name: "ECONOMICS", href: "/economics" }
 ];
+
 
 const Header = () => {
   const location = useLocation();
@@ -62,12 +44,13 @@ const Header = () => {
     };
   }, [sidebarOpen]);
 
+
   return (
     <nav className="bg-white border-b border-b-gray-200 top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-8 flex items-center justify-between h-16">
-        <div>
+        <Link to={"/"}>
           <img src="/BuzzLenz-Logo.png" alt="logo" className="w-[120px]" />
-        </div>
+        </Link>
         {/* Left: Navigation Links (desktop) */}
         <div className="flex-1 flex items-center">
           <div className="hidden md:flex gap-8">
@@ -126,15 +109,32 @@ const Header = () => {
         <div className="max-w-5xl mx-auto flex items-center px-4 py-3">
           {/* Navigation */}
           <nav className="flex gap-6 py-2">
-            {highlights.map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                className="relative font-semibold after:block after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:bg-white after:rounded after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
-              >
-                {link.name}
-              </Link>
-            ))}
+            {highlights.map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? location.pathname === "/"
+                  : location.pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`relative font-semibold after:block after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:bg-white after:rounded after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100 ${
+                    isActive
+                      ? "text-white font-bold"
+                      : "text-gray-100 hover:text-gray-400"
+                  } group`}
+                >
+                  {link.name}
+                  <span
+                    className={`block absolute left-0 -bottom-1 h-0.5 bg-white rounded transition-all duration-300 ${
+                      isActive
+                        ? "w-full scale-100"
+                        : "w-0 scale-0 group-hover:w-full group-hover:scale-100"
+                    }`}
+                  ></span>
+                </Link>
+              );
+            })}
           </nav>
         </div>
       </header>
